@@ -61,12 +61,11 @@ function maketable(rows) {
   if (rows.length == 0) {
     return maketable([{nothing: "nothing"}]);
   }
-  var keyset = Object.keys(rows[0]);
+  var canonicalRow = rows[0];
   for (var i = 0; i < rows.length; ++i) {
     var row = rows[i];
     var tr = elem("tr");
-    for (iii in keyset) {
-      var key = keyset[iii];
+    for (key in canonicalRow) {
       var value = row[key];
       var td = elem("td");
       td.appendChild(document.createTextNode(value + ""));
