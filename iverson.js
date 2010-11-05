@@ -6,6 +6,11 @@ function shew(s)
   body.appendChild(document.createElement("br"));
 }
 
+function put(o) {
+  var body = document.getElementsByTagName("body")[0];
+  body.appendChild(o);
+}
+
 window.onerror = function(a, b, c)
 {
   try {
@@ -69,9 +74,7 @@ function maketable(rows) {
     }
     table.appendChild(tr);
   }
-  var body = document.getElementsByTagName("body")[0];
-  body.appendChild(table);
+  return table;
 }
 
-maketable([{a: 10, b: 20}, {a: 100, b: 200}]);
-
+put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
