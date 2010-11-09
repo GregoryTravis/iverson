@@ -85,6 +85,25 @@ function maketable(rows) {
   return table;
 }
 
+function isScalar(o) {
+  return !(o instanceof Object) && !(o instanceof Array);
+}
+
+function isRecord(o) {
+  return o instanceof Object && !(o instanceof Array);
+}
+
+function isList(o) {
+  return o instanceof Array;
+}
+
+shew(3 instanceof Array);
+shew([3] instanceof Array);
+shew({a:3} instanceof Array);
+shew(3 instanceof Object);
+shew([3] instanceof Object);
+shew({a:3} instanceof Object);
+
 put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
 
 put(maketable(jeter));
