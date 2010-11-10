@@ -14,12 +14,24 @@ function removeDuplicates(arr) {
   return values(hash);
 }
 
+var traceDepth = 0;
+
+function traceIndent() {
+  var s = "";
+  for (var i = 0; i < traceDepth; ++i) {
+    s += "--";
+  }
+  return s;
+}
+
 function tracefun(functionName) {
   var orig = top.window[functionName];
   top.window[functionName] = function () {
-    shew("call " + dupArguments(arguments).join("+"));
+    traceDepth++;
+    shew(traceIndent() + "  " + functionName + "(" + dupArguments(arguments).join(", ") + ")");
     var ret = orig.apply(this, arguments);
-    shew("ret " + ret);
+    shew(traceIndent() + "> " + ret + " " + typeof(ret));
+    traceDepth--;
     return ret;
   };
 }
@@ -221,7 +233,7 @@ function gatherCoords(o) {
   } else if (isRecord(o)) {
     var coords = new Array();
 
-    for (k in o) {
+    for (var k in o) {
       var v = o[k];
       coords = coords.concat(gatherCoords(v).map(function (coord) { return [k].concat(coord); }));
     }
@@ -232,12 +244,12 @@ function gatherCoords(o) {
   }
 }
 
+//tracefuns("gatherCoords");
+
 //put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
 //put(maketable(jeter));
 //put(dumtable([{a: 10, b: 20}, {a: 100, b: 200}]));
 //put(dumtable(jeter));
 
-/* put(dumtable(joe)); */
-/* var pup = gatherCoords(joe); */
-/* //shew(window["gatherCoords"]); */
+put(dumtable(joe));
 put(horizontalArraystable(removeDuplicates(gatherCoords(joe))));
