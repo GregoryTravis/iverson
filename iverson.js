@@ -107,30 +107,21 @@ function values(o) {
   return arr;
 }
 
-function horizontalArraystable(arrays) {
-  var table = elem("table");
-//  table.style.border = "solid 2px green";
-  table.style.background = "#ccc";
-  for (var i = 0; i < arrays.length; ++i) {
-    var tr = elem("tr");
-//    tr.style.border = "solid 2px green";
-    var row = arrays[i];
-    for (var j = 0; j < row.length; ++j) {
-      var td = elem("td");
-      td.style.background = "#eee";
-      var value = row[j];
-      value = (value instanceof Node) ? value : text(value);
-      td.appendChild(value);
-      tr.appendChild(td);
-    }
-    table.appendChild(tr);
+function trow(arr) {
+  var tr = elem("tr");
+  for (var j = 0; j < arr.length; ++j) {
+    var td = elem("td");
+    td.style.background = "#eee";
+    var value = arr[j];
+    value = (value instanceof Node) ? value : text(value);
+    td.appendChild(value);
+    tr.appendChild(td);
   }
-  return table;
+  return tr;
 }
 
-function verticalArrayTable(array) {
+function tcol(array) {
   var table = elem("table");
-//  table.style.border = "solid 2px red";
   table.style.background = "#ccc";
   for (var i = 0; i < array.length; ++i) {
     var tr = elem("tr");
@@ -145,13 +136,22 @@ function verticalArrayTable(array) {
   return table;
 }
 
+function horizontalArraystable(arrays) {
+  var table = elem("table");
+  table.style.background = "#ccc";
+  for (var i = 0; i < arrays.length; ++i) {
+    table.appendChild(trow(arrays[i]));
+  }
+  return table;
+}
+
 function dumtable(o) {
   if (isScalar(o)) {
     return "" + o;
   } else if (isList(o)) {
     var vals = values(o);
     vals = vals.map(function (value) { return dumtable(value); });
-    return verticalArrayTable(vals);
+    return tcol(vals);
   } else if (isRecord(o)) {
     var ks = keys(o);text
     var vals = values(o);
