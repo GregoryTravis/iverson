@@ -109,12 +109,15 @@ function values(o) {
 
 function horizontalArraystable(arrays) {
   var table = elem("table");
-  table.border = 1;
+//  table.style.border = "solid 2px green";
+  table.style.background = "#ccc";
   for (var i = 0; i < arrays.length; ++i) {
     var tr = elem("tr");
+//    tr.style.border = "solid 2px green";
     var row = arrays[i];
     for (var j = 0; j < row.length; ++j) {
       var td = elem("td");
+      td.style.background = "#eee";
       var value = row[j];
       value = (value instanceof Node) ? value : text(value);
       td.appendChild(value);
@@ -127,10 +130,12 @@ function horizontalArraystable(arrays) {
 
 function verticalArrayTable(array) {
   var table = elem("table");
-  table.border = 1;
+//  table.style.border = "solid 2px red";
+  table.style.background = "#ccc";
   for (var i = 0; i < array.length; ++i) {
     var tr = elem("tr");
     var td = elem("td");
+    td.style.background = "#eee";
     var value = array[i];
     value = (value instanceof Node) ? value : text(value);
     td.appendChild(value);
