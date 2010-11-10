@@ -34,7 +34,19 @@ var jeter = [
 var joe =
   { name: "Joe",
     games: [
-      { date: "12/1/2009", atbats: [ { inning: 3, result: "hit" }, { inning: 5, result: "miss" } ] },
+      { date: "12/01/2009", atbats: [ { inning: 3, result: "hit" }, { inning: 5, result: "miss" } ] },
       { date: "12/13/2009", atbats: [ { inning: 2, result: "hit" }, { inning: 7, result: "hit" }, { inning: 9, result: "hit" } ] }
             ]
     };
+
+/*
+Name   games/   atbats/     games/    games/    games/
+            #         #      date     atbats/   atbats/
+                                      inning    result
+-----------------------------------------------------
+Joe         0        0    12/01/2009       3       hit
+Joe         0        1    12/01/2009       5      miss
+Joe         1        0    12/13/2009       2       hit
+Joe         1        1    12/13/2009       7       hit
+Joe         1        2    12/13/2009       9       hit
+*/

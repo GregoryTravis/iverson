@@ -244,6 +244,32 @@ function gatherCoords(o) {
   }
 }
 
+function gatherCoordsAndValues(o) {
+  if (isScalar(o)) {
+    return [[o]];
+  } else if (isList(o)) {
+    var coords = new Array();
+
+    for (var i = 0; i < o.length; ++i) {
+      var v = o[i];
+      coords = coords.concat(gatherCoordsAndValues(v).map(function (coord) { return [i].concat(coord); }));
+    }
+
+    return coords;
+  } else if (isRecord(o)) {
+    var coords = new Array();
+
+    for (var k in o) {
+      var v = o[k];
+      coords = coords.concat(gatherCoordsAndValues(v).map(function (coord) { return [k].concat(coord); }));
+    }
+
+    return coords;
+  } else {
+    return 455;
+  }
+}
+
 //tracefuns("gatherCoords");
 
 //put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
@@ -253,3 +279,4 @@ function gatherCoords(o) {
 
 put(dumtable(joe));
 put(horizontalArraystable(removeDuplicates(gatherCoords(joe))));
+put(horizontalArraystable(removeDuplicates(gatherCoordsAndValues(joe))));
