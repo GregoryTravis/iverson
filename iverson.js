@@ -174,5 +174,6 @@ function isList(o) {
 
 //put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
 //put(maketable(jeter));
-put(dumtable([{a: 10, b: 20}, {a: 100, b: 200}]));
-put(dumtable(jeter));
+//put(dumtable([{a: 10, b: 20}, {a: 100, b: 200}]));
+//put(dumtable(jeter));
+put(dumtable(joe));

@@ -30,3 +30,11 @@ var jeter = [
   { Age: "36", OPS: ".571", BB: "0", Lg: "AL", HBP: "0", Series: "ALDS", Year: "2010", RBI: "1", PA: "14", TB: "4", IBB: "0", SLG: ".286", Opp: "MIN", SH: "0", OBP: ".286", Rslt: "W", Tm: "NYY", B2: "0", HR: "0", CS: "0", H: "4", SF: "0", GDP: "0", BA: ".286", SO: "3", R: "0", SB: "1", G: "3", AB: "14", B3: "0" },
   { Age: "36", OPS: ".709", BB: "2", Lg: "AL", HBP: "0", Series: "ALCS", Year: "2010", RBI: "1", PA: "28", TB: "11", IBB: "0", SLG: ".423", Opp: "TEX", SH: "0", OBP: ".286", Rslt: "L", Tm: "NYY", B2: "3", HR: "0", CS: "0", H: "6", SF: "0", GDP: "1", BA: ".231", SO: "7", R: "2", SB: "0", G: "6", AB: "26", B3: "1" }
 ];
+
+var joe =
+  { name: "Joe",
+    games: [
+      { date: "12/1/2009", atbats: [ { inning: 3, result: "hit" }, { inning: 5, result: "miss" } ] },
+      { date: "12/13/2009", atbats: [ { inning: 2, result: "hit" }, { inning: 7, result: "hit" }, { inning: 9, result: "hit" } ] }
+            ]
+    };
