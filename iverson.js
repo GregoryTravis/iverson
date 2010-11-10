@@ -6,6 +6,14 @@ function dupArguments(as) {
   return arr;
 }
 
+function removeDuplicates(arr) {
+  var hash = new Object();
+  for (var i = 0; i < arr.length; ++i) {
+    hash[arr[i]] = arr[i];
+  }
+  return values(hash);
+}
+
 function tracefun(functionName) {
   var orig = top.window[functionName];
   top.window[functionName] = function () {
@@ -232,4 +240,4 @@ function gatherCoords(o) {
 /* put(dumtable(joe)); */
 /* var pup = gatherCoords(joe); */
 /* //shew(window["gatherCoords"]); */
-put(horizontalArraystable(gatherCoords(joe)));
+put(horizontalArraystable(removeDuplicates(gatherCoords(joe))));
