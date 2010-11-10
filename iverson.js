@@ -172,8 +172,35 @@ function isList(o) {
   return o instanceof Array;
 }
 
+function gatherCoords(o) {
+  if (isScalar(o)) {
+    return [["."]];
+  } else if (isList(o)) {
+    var coords = new Array();
+
+    for (var i = 0; i < o.length; ++i) {
+      var v = o[i];
+      coords = coords.concat(gatherCoords(v).map(function (coord) { return ["*"].concat(coord); }));
+    }
+
+    return coords;
+  } else if (isRecord(o)) {
+    var coords = new Array();
+
+    for (k in o) {
+      var v = o[k];
+      coords = coords.concat(gatherCoords(v).map(function (coord) { return [k].concat(coord); }));
+    }
+
+    return coords;
+  } else {
+    return 455;
+  }
+}
+
 //put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
 //put(maketable(jeter));
 //put(dumtable([{a: 10, b: 20}, {a: 100, b: 200}]));
 //put(dumtable(jeter));
 put(dumtable(joe));
+shew(gatherCoords(joe));
