@@ -1,3 +1,27 @@
+function dupArguments(as) {
+  var arr = new Array();
+  for (var i = 0; i < as.length; ++i) {
+    arr.push(as[i]);
+  }
+  return arr;
+}
+
+function tracefun(functionName) {
+  var orig = top.window[functionName];
+  top.window[functionName] = function () {
+    shew("call " + dupArguments(arguments).join("+"));
+    var ret = orig.apply(this, arguments);
+    shew("ret " + ret);
+    return ret;
+  };
+}
+
+function tracefuns() {
+  for (var i = 0; i < arguments.length; ++i) {
+    tracefun(arguments[i]);
+  }
+}
+
 function text(o) {
   return document.createTextNode(o + "");
 }
@@ -160,6 +184,8 @@ function dumtable(o) {
   }
 }
 
+//tracefuns("tcol", "horizontalArraystable", "dumtable");
+
 function isScalar(o) {
   return !(o instanceof Object) && !(o instanceof Array);
 }
@@ -202,5 +228,8 @@ function gatherCoords(o) {
 //put(maketable(jeter));
 //put(dumtable([{a: 10, b: 20}, {a: 100, b: 200}]));
 //put(dumtable(jeter));
-put(dumtable(joe));
-shew(gatherCoords(joe));
+
+/* put(dumtable(joe)); */
+/* var pup = gatherCoords(joe); */
+/* //shew(window["gatherCoords"]); */
+put(dumtable(gatherCoords(joe)));
