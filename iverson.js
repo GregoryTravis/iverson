@@ -200,7 +200,7 @@ function isList(o) {
 
 function gatherCoords(o) {
   if (isScalar(o)) {
-    return [["."]];
+    return [[]];
   } else if (isList(o)) {
     var coords = new Array();
 
@@ -232,4 +232,4 @@ function gatherCoords(o) {
 /* put(dumtable(joe)); */
 /* var pup = gatherCoords(joe); */
 /* //shew(window["gatherCoords"]); */
-put(dumtable(gatherCoords(joe)));
+put(horizontalArraystable(gatherCoords(joe)));
