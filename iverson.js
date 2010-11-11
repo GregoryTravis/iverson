@@ -329,6 +329,88 @@ function splitAxesAndValue(lists) {
   return lists.map(splitAxesAndValueOne);
 }
 
+function mapListAxesTable(o) {
+  var ct = new CoordTable();
+  var av = splitAxesAndValue(gatherCoordsAndValues(o));
+  for (var i = 0; i < av.length; ++i) {
+    var v = av[i];
+    var mapCoords = v[0];
+    var listCoords = v[1];
+    var value = v[2];
+    ct.put(mapCoords.join("/"), listCoords.join("/"), value);
+  }
+  return ct;
+}
+
+function OrderedSet() {
+  var set = new Object();
+  var list = new Array();
+
+  this.put = function(v) {
+    if (set[v] == undefined) {
+      set[v] = 1;
+      list.push(v);
+    }
+  };
+
+  this.asList = function() {
+    return list;
+  };
+
+  return this;
+}
+
+function CoordTable() {
+  var xs = new OrderedSet();
+  var ys = new OrderedSet();
+
+  var values = new Object();
+
+  this.key = function(x, y) {
+    return x + "////////" + y;
+  };
+
+  this.put = function (x, y, value) {
+    xs.put(x);
+    ys.put(y);
+    values[this.key(x, y)] = value;
+  };
+
+  this.asHtml = function() {
+    var xlist = xs.asList();
+    var ylist = ys.asList();
+
+    var table = elem("table");
+    table.style.background = "#ccc";
+
+    var tr = elem("tr");
+    tr.appendChild(text("."));
+    for (var j = 0; j < xlist.length; ++j) {
+      var th = elem("th");
+      th.appendChild(text(xlist[j]));
+      tr.appendChild(th);
+    }
+    table.appendChild(tr);
+
+    for (var i = 0; i < ylist.length; ++i) {
+      var tr = elem("tr");
+      tr.appendChild(text(ylist[i]));
+      for (var j = 0; j < xlist.length; ++j) {
+        var td = elem("td");
+        var value = values[this.key(xlist[j], ylist[i])];
+        value = (value instanceof Node) ? value : text(value);
+        td.appendChild(value);
+        tr.appendChild(td);
+      }
+      table.appendChild(tr);
+    }
+
+    return table;
+  };
+
+  return this;
+}
+
 //tracefuns("gatherCoords");
 
 //put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
@@ -336,8 +418,9 @@ function splitAxesAndValue(lists) {
 //put(dumtable([{a: 10, b: 20}, {a: 100, b: 200}]));
 //put(dumtable(jeter));
 
-put(dumtable(joe));
-put(horizontalArraystable(removeDuplicates(gatherCoords(joe))));
-put(horizontalArraystable(gatherCoordsAndValues(joe)));
-put(horizontalArraystable(gatherCoordsAndValues(joe)));
+/* put(dumtable(joe)); */
+/* put(horizontalArraystable(removeDuplicates(gatherCoords(joe)))); */
+/* put(horizontalArraystable(gatherCoordsAndValues(joe))); */
+/* put(horizontalArraystable(gatherCoordsAndValues(joe))); */
 put(horizontalArraystable(splitAxesAndValue(gatherCoordsAndValues(joe))));
+put(mapListAxesTable(joe).asHtml());
