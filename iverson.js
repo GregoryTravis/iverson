@@ -1,3 +1,38 @@
+function dup(o) {
+  var oo = new Object();
+  for (k in o) {
+    oo[k] = o[k];
+  }
+  return oo;
+}
+
+function concat() {
+  var arr = new Array();
+  for (var i = 0; i < arguments.length; ++i) {
+    arr = arr.concat(arguments[i]);
+  }
+  return arry;
+}
+
+function mkrec() {
+  var o = new Object();
+  for (var i = 0; i < arguments.length; i += 2) {
+    o[arguments[i]] = arguments[i + 1];
+  }
+  return o;
+}
+
+function recordAppend() {
+  var app = new Object();
+  for (var i = 0; i < arguments.length; ++i) {
+    var o = arguments[i];
+    for (k in o) {
+      app[k] = o;
+    }
+  }
+  return o;
+}
+
 function dupArguments(as) {
   var arr = new Array();
   for (var i = 0; i < as.length; ++i) {
@@ -279,4 +314,4 @@ function gatherCoordsAndValues(o) {
 
 put(dumtable(joe));
 put(horizontalArraystable(removeDuplicates(gatherCoords(joe))));
-put(horizontalArraystable(removeDuplicates(gatherCoordsAndValues(joe))));
+put(horizontalArraystable(gatherCoordsAndValues(joe)));

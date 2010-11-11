@@ -49,4 +49,7 @@ Joe         0        1    12/01/2009       5      miss
 Joe         1        0    12/13/2009       2       hit
 Joe         1        1    12/13/2009       7       hit
 Joe         1        2    12/13/2009       9       hit
+
+Doesn't work if lists on two branches, that would be cartesian product.
+
 */
