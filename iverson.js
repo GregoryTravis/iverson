@@ -197,7 +197,7 @@ function trow(arr) {
   var tr = elem("tr");
   for (var j = 0; j < arr.length; ++j) {
     var td = elem("td");
-    td.style.background = "#eee";
+    td.style.background = "#d8d8d8";
     var value = arr[j];
     value = (value instanceof Node) ? value : text(value);
     td.appendChild(value);
@@ -208,11 +208,11 @@ function trow(arr) {
 
 function tcol(array) {
   var table = elem("table");
-  table.style.background = "#ccc";
+  table.style.background = "#fff";
   for (var i = 0; i < array.length; ++i) {
     var tr = elem("tr");
     var td = elem("td");
-    td.style.background = "#eee";
+    td.style.background = "#d8d8d8";
     var value = array[i];
     value = (value instanceof Node) ? value : text(value);
     td.appendChild(value);
@@ -224,7 +224,7 @@ function tcol(array) {
 
 function horizontalArraystable(arrays) {
   var table = elem("table");
-  table.style.background = "#ccc";
+  table.style.background = "#fff";
   for (var i = 0; i < arrays.length; ++i) {
     table.appendChild(trow(arrays[i]));
   }
