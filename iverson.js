@@ -1,3 +1,7 @@
+function isNumber (o) {
+  return !isNaN(o-0);
+}
+
 function dup(o) {
   var oo = new Object();
   for (k in o) {
@@ -81,12 +85,15 @@ function text(o) {
   return document.createTextNode(o + "");
 }
 
-function shew(s)
+function shew()
 {
-  var e = text(s);
-  var body = document.getElementsByTagName("body")[0];
-  body.appendChild(e);
-  body.appendChild(document.createElement("br"));
+  for (var i = 0; i < arguments.length; ++i) {
+    var s = arguments[i];
+    var e = text(s);
+    var body = document.getElementsByTagName("body")[0];
+    body.appendChild(e);
+    body.appendChild(document.createElement("br"));
+  }
 }
 
 function put(o) {
@@ -236,6 +243,8 @@ function dumtable(o) {
     var vals = values(o);
     vals = vals.map(function (value) { return dumtable(value); });
     return horizontalArraystable([ks, vals]);
+  } else {
+    return 455;
   }
 }
 
@@ -305,6 +314,21 @@ function gatherCoordsAndValues(o) {
   }
 }
 
+function splitAxesAndValueOne(list) {
+  var mapCoords = new Array();
+  var listCoords = new Array();
+  for (var i = 0; i < list.length - 1; ++i) {
+    var c = list[i];
+    (isNumber(c) ? listCoords : mapCoords).push(c);
+  }
+  var value = list[list.length - 1];
+  return [mapCoords, listCoords, value];
+}
+
+function splitAxesAndValue(lists) {
+  return lists.map(splitAxesAndValueOne);
+}
+
 //tracefuns("gatherCoords");
 
 //put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
@@ -315,3 +339,5 @@ function gatherCoordsAndValues(o) {
 put(dumtable(joe));
 put(horizontalArraystable(removeDuplicates(gatherCoords(joe))));
 put(horizontalArraystable(gatherCoordsAndValues(joe)));
+put(horizontalArraystable(gatherCoordsAndValues(joe)));
+put(horizontalArraystable(splitAxesAndValue(gatherCoordsAndValues(joe))));
