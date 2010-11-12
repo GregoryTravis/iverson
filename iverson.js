@@ -1,3 +1,11 @@
+function valuemap(f, m) {
+  var ret = new Object();
+  for (k in m) {
+    ret[k] = f(m[k]);
+  }
+  return ret;
+}
+
 function isNumber (o) {
   return !isNaN(o-0);
 }
@@ -411,6 +419,18 @@ function CoordTable() {
   return this;
 }
 
+function extractHierarchy(o) {
+  if (isScalar(o)) {
+    return "_";
+  } else if (isList(o)) {
+    return ["*", extractHierarchy(o[0])];
+  } else if (isRecord(o)) {
+    return valuemap(extractHierarchy, o);
+  } else {
+    return 455;
+  }
+}
+
 //tracefuns("gatherCoords");
 
 //put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
@@ -424,3 +444,4 @@ function CoordTable() {
 /* put(horizontalArraystable(gatherCoordsAndValues(joe))); */
 put(horizontalArraystable(splitAxesAndValue(gatherCoordsAndValues(joe))));
 put(mapListAxesTable(joe).asHtml());
+put(dumtable(extractHierarchy(joe)));
