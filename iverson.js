@@ -442,6 +442,6 @@ function extractHierarchy(o) {
 /* put(horizontalArraystable(removeDuplicates(gatherCoords(joe)))); */
 /* put(horizontalArraystable(gatherCoordsAndValues(joe))); */
 /* put(horizontalArraystable(gatherCoordsAndValues(joe))); */
-put(horizontalArraystable(splitAxesAndValue(gatherCoordsAndValues(joe))));
+//put(horizontalArraystable(splitAxesAndValue(gatherCoordsAndValues(joe))));
 put(mapListAxesTable(joe).asHtml());
 put(dumtable(extractHierarchy(joe)));
