@@ -423,7 +423,7 @@ function extractHierarchy(o) {
   if (isScalar(o)) {
     return "_";
   } else if (isList(o)) {
-    return ["*", extractHierarchy(o[0])];
+    return [extractHierarchy(o[0])];
   } else if (isRecord(o)) {
     return valuemap(extractHierarchy, o);
   } else {
