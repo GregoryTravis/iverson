@@ -539,4 +539,4 @@ function justHashes(o) {
 //put(mapListAxesTable(joe).asHtml());
 put(dumtable(extractHierarchy(joe)));
 put(dumtable(getListPaths(joe)));
-put(dumtable(asRecords(joe, ["games", "*", "atbats"])));
+put(maketable(asRecords(joe, ["games", "*", "atbats"])));
