@@ -23,7 +23,7 @@ function concat() {
   for (var i = 0; i < arguments.length; ++i) {
     arr = arr.concat(arguments[i]);
   }
-  return arry;
+  return arr;
 }
 
 function mkrec() {
@@ -431,6 +431,25 @@ function extractHierarchy(o) {
   }
 }
 
+function getListPaths(o) {
+  return getListPaths1(o, []);
+}
+
+function getListPaths1(o, prefix) {
+  if (isScalar(o)) {
+    return [];
+  } else if (isList(o)) {
+    return [prefix].concat(getListPaths1(o[0], prefix));
+  } else if (isRecord(o)) {
+    return concat.apply(this,
+      keys(o).map(function (k) {
+          return getListPaths1(o[k], prefix.concat([k]));
+        }));
+  } else {
+    return 455;
+  }
+}
+
 //tracefuns("gatherCoords");
 
 //put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
@@ -443,5 +462,6 @@ function extractHierarchy(o) {
 /* put(horizontalArraystable(gatherCoordsAndValues(joe))); */
 /* put(horizontalArraystable(gatherCoordsAndValues(joe))); */
 //put(horizontalArraystable(splitAxesAndValue(gatherCoordsAndValues(joe))));
-put(mapListAxesTable(joe).asHtml());
+//put(mapListAxesTable(joe).asHtml());
 put(dumtable(extractHierarchy(joe)));
+put(dumtable(getListPaths(joe)));
