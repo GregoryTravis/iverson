@@ -1,3 +1,14 @@
+function err(s) {
+  shew("ERROR: " + s);
+  throw s;
+}
+
+function assert(b) {
+  if (!b) {
+    err("assertion failure");
+  }
+}
+
 function valuemap(f, m) {
   var ret = new Object();
   for (k in m) {
