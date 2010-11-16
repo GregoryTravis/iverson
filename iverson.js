@@ -1,3 +1,13 @@
+function full(o) {
+  if (o instanceof Array) {
+    return "[" + o.map(full).join(", ") + "]";
+  } else if (o instanceof Object) {
+    return "{" + keys(o).map(function (key) { return key + ": " + full(o[key]); }).join(", ") + "}";
+  } else {
+    return "" + o;
+  }
+}
+
 function err(s) {
   shew("ERROR: " + s);
   throw s;
@@ -11,7 +21,7 @@ function assert(b) {
 
 function valuemap(f, m) {
   var ret = new Object();
-  for (k in m) {
+  for (var k in m) {
     ret[k] = f(m[k]);
   }
   return ret;
@@ -23,7 +33,7 @@ function isNumber (o) {
 
 function dup(o) {
   var oo = new Object();
-  for (k in o) {
+  for (var k in o) {
     oo[k] = o[k];
   }
   return oo;
@@ -49,11 +59,11 @@ function recordAppend() {
   var app = new Object();
   for (var i = 0; i < arguments.length; ++i) {
     var o = arguments[i];
-    for (k in o) {
-      app[k] = o;
+    for (var k in o) {
+      app[k] = o[k];
     }
   }
-  return o;
+  return app;
 }
 
 function dupArguments(as) {
@@ -173,7 +183,7 @@ function maketable(rows) {
   var canonicalRow = rows[0];
 
   var tr = elem("tr");
-  for (key in canonicalRow) {
+  for (var key in canonicalRow) {
     var th = elem("th");
     th.appendChild(document.createTextNode(key + ""));
     tr.appendChild(th);
@@ -183,7 +193,7 @@ function maketable(rows) {
   for (var i = 0; i < rows.length; ++i) {
     var row = rows[i];
     var tr = elem("tr");
-    for (key in canonicalRow) {
+    for (var key in canonicalRow) {
       var value = row[key];
       var td = elem("td");
       td.appendChild(document.createTextNode(value + ""));
@@ -197,7 +207,7 @@ function maketable(rows) {
 function keys(o) {
   var arr = new Array();
   var inx = 0;
-  for (k in o) {
+  for (var k in o) {
     arr[inx++] = k;
   }
   return arr;
@@ -206,7 +216,7 @@ function keys(o) {
 function values(o) {
   var arr = new Array();
   var inx = 0;
-  for (k in o) {
+  for (var k in o) {
     arr[inx++] = o[k];
   }
   return arr;
@@ -450,7 +460,7 @@ function getListPaths1(o, prefix) {
   if (isScalar(o)) {
     return [];
   } else if (isList(o)) {
-    return [prefix].concat(getListPaths1(o[0], prefix));
+    return [prefix].concat(getListPaths1(o[0], concat(prefix, "*")));
   } else if (isRecord(o)) {
     return concat.apply(this,
       keys(o).map(function (k) {
@@ -461,7 +471,60 @@ function getListPaths1(o, prefix) {
   }
 }
 
-//tracefuns("gatherCoords");
+function asRecords(o, listPath) {
+  if (listPath.length == 0) {
+    assert(isList(o));
+    return o;
+  }
+
+  if (isScalar(o)) {
+    assert(false);
+  } else if (isList(o)) {
+    assert(listPath[0] == "*");
+
+    return concat.apply(this,
+      o.map(function(rec) { return asRecords(rec, listPath.slice(1)); }));
+
+  } else if (isRecord(o)) {
+    assert(listPath.length > 0);
+
+    var children = asRecords(o[listPath[0]], listPath.slice(1));
+
+    for (var k in o) {
+      if (k != listPath[0] && !(listPath.length == 1 && isList(o[k]))) {
+        children = children.map(function(rec) { return recordAppend(rec, mkrec(k, justHashes(o[k]))); });
+      }
+    }
+
+    return children;
+  } else {
+    return 455;
+  }
+}
+
+function justHashes(o) {
+  if (isScalar(o)) {
+    return o;
+  } else if (isList(o)) {
+    return ["-"];
+  } else if (isRecord(o)) {
+    assert(listPath.length > 0);
+
+    var children = asRecords(o[listPath[0]], listPath.slice(1));
+
+    for (var k in o) {
+      if (k != listPath[0]) {
+        children = children.map(function(rec) { return recordAppend(rec, mkrec(k, justHashes(o[k]))); });
+      }
+    }
+
+    return children;
+  } else {
+    return 455;
+  }
+}
+
+//tracefuns("asRecords");
 
 //put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
 //put(maketable(jeter));
@@ -476,3 +539,4 @@ function getListPaths1(o, prefix) {
 //put(mapListAxesTable(joe).asHtml());
 put(dumtable(extractHierarchy(joe)));
 put(dumtable(getListPaths(joe)));
+put(dumtable(asRecords(joe, ["games", "*", "atbats"])));
