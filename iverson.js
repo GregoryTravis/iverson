@@ -550,6 +550,7 @@ put(dumtable(extractHierarchy(joe)));
 
 function blurt(data) {
   listmap(function(path) {
+      shew(full(path));
       put(maketable(asRecords(data, path)));
     }, getListPaths(data));
 }
