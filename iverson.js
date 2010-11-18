@@ -19,10 +19,30 @@ function assert(b) {
   }
 }
 
+function listIndexMap(f, list) {
+  var arr = new Array();
+  for (var i = 0; i < list.length; ++i) {
+    arr.push(f(i));
+  }
+  return arr;
+}
+
+function keymap(f, m) {
+  return listmap(f, keys(m));
+}
+
 function valuemap(f, m) {
   var ret = new Object();
   for (var k in m) {
     ret[k] = f(m[k]);
+  }
+  return ret;
+}
+
+function entrymap(f, m) {
+  var ret = new Object();
+  for (var k in m) {
+    ret[k] = f(k, m[k]);
   }
   return ret;
 }
@@ -100,9 +120,9 @@ function tracefun(functionName) {
   var orig = top.window[functionName];
   top.window[functionName] = function () {
     traceDepth++;
-    shew(traceIndent() + "  " + functionName + "(" + dupArguments(arguments).join(", ") + ")");
+    shew(traceIndent() + "  " + functionName + "(" + dupArguments(arguments).map(full).join(", ") + ")");
     var ret = orig.apply(this, arguments);
-    shew(traceIndent() + "> " + ret + " " + typeof(ret));
+    shew(traceIndent() + "> " + full(ret));
     traceDepth--;
     return ret;
   };
@@ -116,6 +136,11 @@ function tracefuns() {
 
 function text(o) {
   return document.createTextNode(o + "");
+}
+
+function sr(o) {
+  shew(full(o));
+  return o;
 }
 
 function shew()
@@ -553,6 +578,20 @@ function get(o, path) {
   }
 }
 
+function allLeafPaths(o) {
+  if (isScalar(o)) {
+    return [[]];
+  } else if (isList(o)) {
+    return concat.apply(this, listIndexMap(function(i) { return allLeafPaths(o[i]).map(function (r) { return concat([i], r); }); }, o));
+  } else if (isRecord(o)) {
+    return concat.apply(this, keymap(function (k) { return allLeafPaths(o[k]).map(function (path) { return concat([k], path); }); }, o)); // concat([k], allLeafPaths(o[k])); }, o);
+   } else {
+    assert(false);
+  }
+}
+
+//tracefuns("allLeafPaths");
+
 //tracefuns("asRecords");
 
 //put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
@@ -572,13 +611,17 @@ put(dumtable(extractHierarchy(joe)));
 /* put(maketable(asRecords(joe, ["games", "*", "catches"]))); */
 /* put(maketable(asRecords(joe, ["games"]))); */
 //blurt(joe);
-listmap(function (path) { shew(full(get(joe, path))); },
-  [
-    ["name"],
-    ["games", "0", "date"],
-    ["games", "1", "date"],
-    ["games", "0", "atbats", "0", "inning"],
-    ["games", "0", "atbats", "1", "result"],
-    ["games", "1", "catches", "1", "inning"],
-    ["games", "1", "catches", "1", "caught"]
-   ]);
+/* listmap(function (path) { shew(full(get(joe, path))); }, */
+/*   [ */
+/*     ["name"], */
+/*     ["games", "0", "date"], */
+/*     ["games", "1", "date"], */
+/*     ["games", "0", "atbats", "0", "inning"], */
+/*     ["games", "0", "atbats", "1", "result"], */
+/*     ["games", "1", "catches", "1", "inning"], */
+/*     ["games", "1", "catches", "1", "caught"] */
+/*    ]); */
+shew(full(allLeafPaths(joe)));
+shew(full(allLeafPaths({a: 10, b: [{c: 30, d: 40}, {c: 300, d: 400}]})));
+listmap(function (path) { shew(path, full(get(joe, path))); },
+  allLeafPaths(joe));
