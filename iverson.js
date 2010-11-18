@@ -27,6 +27,10 @@ function valuemap(f, m) {
   return ret;
 }
 
+function listmap(f, list) {
+  return list.map(f);
+}
+
 function isNumber (o) {
   return !isNaN(o-0);
 }
@@ -474,6 +478,7 @@ function getListPaths1(o, prefix) {
 function asRecords(o, listPath) {
   if (listPath.length == 0) {
     assert(isList(o));
+    o = listmap(function (oo) { return valuemap(function(v) { if (isList(v)) return ["*"]; else return v; }, oo); }, o); //shew(full(oo)); return oo; }, o);
     return o;
   }
 
