@@ -541,3 +541,4 @@ put(dumtable(extractHierarchy(joe)));
 put(dumtable(getListPaths(joe)));
 put(maketable(asRecords(joe, ["games", "*", "atbats"])));
 put(maketable(asRecords(joe, ["games", "*", "catches"])));
+put(maketable(asRecords(joe, ["games"])));
