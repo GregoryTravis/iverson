@@ -39,7 +39,7 @@ var joe =
         catches: [ { inning: 3, caught: true }, { inning: 6, caught: false } ] },
       { date: "12/13/2009",
         atbats: [ { inning: 2, result: "hit" }, { inning: 7, result: "hit" }, { inning: 9, result: "hit" } ],
-        catches: [ { inning: 3, caught: true }, { inning: 6, caught: false } ] }
+        catches: [ { inning: 5, caught: true }, { inning: 9, caught: false } ] }
             ]
     };
 
