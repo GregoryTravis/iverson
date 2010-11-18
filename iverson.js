@@ -277,7 +277,7 @@ function dumtable(o) {
     vals = vals.map(function (value) { return dumtable(value); });
     return horizontalArraystable([ks, vals]);
   } else {
-    return 455;
+    assert(false);
   }
 }
 
@@ -317,7 +317,7 @@ function gatherCoords(o) {
 
     return coords;
   } else {
-    return 455;
+    assert(false);
   }
 }
 
@@ -343,7 +343,7 @@ function gatherCoordsAndValues(o) {
 
     return coords;
   } else {
-    return 455;
+    assert(false);
   }
 }
 
@@ -452,7 +452,7 @@ function extractHierarchy(o) {
   } else if (isRecord(o)) {
     return valuemap(extractHierarchy, o);
   } else {
-    return 455;
+    assert(false);
   }
 }
 
@@ -471,7 +471,7 @@ function getListPaths1(o, prefix) {
           return getListPaths1(o[k], prefix.concat([k]));
         }));
   } else {
-    return 455;
+    assert(false);
   }
 }
 
@@ -503,7 +503,7 @@ function asRecords(o, listPath) {
 
     return children;
   } else {
-    return 455;
+    assert(false);
   }
 }
 
@@ -525,7 +525,31 @@ function justHashes(o) {
 
     return children;
   } else {
-    return 455;
+    assert(false);
+  }
+}
+
+function blurt(data) {
+  listmap(function(path) {
+      shew(full(path));
+      put(maketable(asRecords(data, path)));
+    }, getListPaths(data));
+}
+
+function get(o, path) {
+  if (isScalar(o)) {
+    assert(path.length == 0);
+    return o;
+  } else if (isList(o)) {
+    assert(path.length > 0);
+    assert(isNumber(path[0]));
+    return get(o[path[0]], path.slice(1));
+  } else if (isRecord(o)) {
+    assert(path.length > 0);
+    assert(o[path[0]] != undefined);
+    return get(o[path[0]], path.slice(1));
+  } else {
+    assert(false);
   }
 }
 
@@ -547,12 +571,14 @@ put(dumtable(extractHierarchy(joe)));
 /* put(maketable(asRecords(joe, ["games", "*", "atbats"]))); */
 /* put(maketable(asRecords(joe, ["games", "*", "catches"]))); */
 /* put(maketable(asRecords(joe, ["games"]))); */
-
-function blurt(data) {
-  listmap(function(path) {
-      shew(full(path));
-      put(maketable(asRecords(data, path)));
-    }, getListPaths(data));
-}
-
-blurt(joe);
+//blurt(joe);
+listmap(function (path) { shew(full(get(joe, path))); },
+  [
+    ["name"],
+    ["games", "0", "date"],
+    ["games", "1", "date"],
+    ["games", "0", "atbats", "0", "inning"],
+    ["games", "0", "atbats", "1", "result"],
+    ["games", "1", "catches", "1", "inning"],
+    ["games", "1", "catches", "1", "caught"]
+   ]);
