@@ -543,7 +543,15 @@ function justHashes(o) {
 //put(horizontalArraystable(splitAxesAndValue(gatherCoordsAndValues(joe))));
 //put(mapListAxesTable(joe).asHtml());
 put(dumtable(extractHierarchy(joe)));
-put(dumtable(getListPaths(joe)));
-put(maketable(asRecords(joe, ["games", "*", "atbats"])));
-put(maketable(asRecords(joe, ["games", "*", "catches"])));
-put(maketable(asRecords(joe, ["games"])));
+/* put(dumtable(getListPaths(joe))); */
+/* put(maketable(asRecords(joe, ["games", "*", "atbats"]))); */
+/* put(maketable(asRecords(joe, ["games", "*", "catches"]))); */
+/* put(maketable(asRecords(joe, ["games"]))); */
+
+function blurt(data) {
+  listmap(function(path) {
+      put(maketable(asRecords(data, path)));
+    }, getListPaths(data));
+}
+
+blurt(joe);
