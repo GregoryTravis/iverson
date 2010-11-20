@@ -1,6 +1,12 @@
+function hr() {
+  shew("----------------");
+}
+
 function full(o) {
   if (o instanceof Array) {
     return "[" + o.map(full).join(", ") + "]";
+  } else if (o instanceof Function) {
+    return "[func]";
   } else if (o instanceof Object) {
     return "{" + keys(o).map(function (key) { return key + ": " + full(o[key]); }).join(", ") + "}";
   } else {
@@ -8,7 +14,19 @@ function full(o) {
   }
 }
 
+function indices(arr) {
+  var inds = new Array(arr.length);
+  for (var i = 0; i < arr.length; ++i) {
+    inds[i] = i;
+  }
+  return inds;
+}
+
 function err(s) {
+  if (s == undefined) {
+    s = "whatever";
+  }
+
   shew("ERROR: " + s);
   throw s;
 }
@@ -313,11 +331,12 @@ function isScalar(o) {
 }
 
 function isRecord(o) {
-  return o instanceof Object && !(o instanceof Array);
+  return (o instanceof Object && !(o instanceof Array)) ||
+    (o.isRecord != undefined && o.isRecord);
 }
 
 function isList(o) {
-  return o instanceof Array;
+  return o instanceof Array || (o.isList != undefined && o.isList);
 }
 
 function gatherCoords(o) {
@@ -621,7 +640,86 @@ put(dumtable(extractHierarchy(joe)));
 /*     ["games", "1", "catches", "1", "inning"], */
 /*     ["games", "1", "catches", "1", "caught"] */
 /*    ]); */
-shew(full(allLeafPaths(joe)));
-shew(full(allLeafPaths({a: 10, b: [{c: 30, d: 40}, {c: 300, d: 400}]})));
-listmap(function (path) { shew(path, full(get(joe, path))); },
-  allLeafPaths(joe));
+/* shew(full(allLeafPaths(joe))); */
+/* shew(full(allLeafPaths({a: 10, b: [{c: 30, d: 40}, {c: 300, d: 400}]}))); */
+/* listmap(function (path) { shew(path, full(get(joe, path))); }, */
+/*   allLeafPaths(joe)); */
+
+function toNodesOne(o) {
+  if (isScalar(o)) {
+    return o;
+  } else if (isList(o)) {
+    return new RawList(o);
+  } else if (isRecord(o)) {
+    return new RawRecord(o);
+  } else {
+    err();
+  }
+}
+
+function toNodes(o) {
+  if (isScalar(o)) {
+    return o;
+  } else if (isList(o)) {
+    return new RawList(listmap(toNodes, o));
+  } else if (isRecord(o)) {
+    return new RawRecord(valuemap(toNodes, o));
+  } else {
+    err(full(o));
+  }
+}
+
+function RawList(arr) {
+  this.arr = arr;
+  this.isList = true;
+  this.coords = function() {
+    return indices(this.arr);
+  };
+  this.get = function(i) {
+    return this.arr[i];
+  };
+}
+
+function RawRecord(o) {
+  this.o = o;
+  this.isRecord = true;
+  this.coords = function() {
+    return keys(this.o);
+  };
+  this.get = function(k) {
+    return this.o[k];
+  };
+}
+
+function toRaw(n) {
+  if (isList(n)) {
+    var arr = new Array();
+    var coords = n.coords();
+    for (i in n.coords()) {
+      arr[i] = toRaw(n.get(i));
+    }
+    return arr;
+  } else if (isRecord(n)) {
+    var o = new Object();
+    var coords = n.coords();
+    for (i in coords) {
+      var k = coords[i];
+      o[k] = toRaw(n.get(k));
+    }
+    return o;
+  } else {
+    return n;
+  }
+}
+
+//tracefuns("toRaw");
+
+function ts(n) {
+  return full(toRaw(n));
+}
+
+shew(full(small));
+hr();
+shew(full(toNodes(small)));
+hr();
+shew(full(toRaw(toNodes(small))));

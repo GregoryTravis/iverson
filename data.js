@@ -57,3 +57,5 @@ Joe         1        2    12/13/2009       9       hit
 Doesn't work if lists on two branches, that would be cartesian product.
 
 */
+
+var small = { a: 10, b: [ { c: 30 }, { c: 300 } ] };
