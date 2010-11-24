@@ -610,17 +610,17 @@ function allLeafPaths(o) {
   }
 }
 
-/* function allNonListPaths(o) { */
-/*   if (isScalar(o)) { */
-/*     return [[]]; */
-/*   } else if (isList(o)) { */
-/*     return allNonListPaths(o[0]).map(function (r) { return concat(['*'], r); }); */
-/*   } else if (isRecord(o)) { */
-/*     return concat.apply(this, keymap(function (k) { return allNonListPaths(o[k]).map(function (path) { return concat([k], path); }); }, o)); // concat([k], allLeafPaths(o[k])); }, o); */
-/*    } else { */
-/*     assert(false); */
-/*   } */
-/* } */
+function allNonListPaths(o) {
+  if (isScalar(o)) {
+    return [[]];
+  } else if (isList(o)) {
+    return allNonListPaths(o[0]).map(function (r) { return concat(['*'], r); });
+  } else if (isRecord(o)) {
+    return concat.apply(this, keymap(function (k) { return allNonListPaths(o[k]).map(function (path) { return concat([k], path); }); }, o)); // concat([k], allLeafPaths(o[k])); }, o);
+   } else {
+    assert(false);
+  }
+}
 
 //tracefuns("allLeafPaths");
 
@@ -747,3 +747,5 @@ toAndFromNodes(small);
 toAndFromNodes(joe);
 checkToAndFromNodes(small);
 checkToAndFromNodes(joe);
+
+shew(full(allNonListPaths(joe)));
