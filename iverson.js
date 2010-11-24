@@ -597,6 +597,7 @@ function get(o, path) {
   }
 }
 
+// The path to each leaf
 function allLeafPaths(o) {
   if (isScalar(o)) {
     return [[]];
@@ -608,6 +609,18 @@ function allLeafPaths(o) {
     assert(false);
   }
 }
+
+/* function allNonListPaths(o) { */
+/*   if (isScalar(o)) { */
+/*     return [[]]; */
+/*   } else if (isList(o)) { */
+/*     return allNonListPaths(o[0]).map(function (r) { return concat(['*'], r); }); */
+/*   } else if (isRecord(o)) { */
+/*     return concat.apply(this, keymap(function (k) { return allNonListPaths(o[k]).map(function (path) { return concat([k], path); }); }, o)); // concat([k], allLeafPaths(o[k])); }, o); */
+/*    } else { */
+/*     assert(false); */
+/*   } */
+/* } */
 
 //tracefuns("allLeafPaths");
 
@@ -718,8 +731,19 @@ function ts(n) {
   return full(toRaw(n));
 }
 
-shew(full(small));
-hr();
-shew(full(toNodes(small)));
-hr();
-shew(full(toRaw(toNodes(small))));
+function toAndFromNodes(o) {
+  shew(full(o));
+  hr();
+  shew(full(toNodes(o)));
+  hr();
+  shew(full(toRaw(toNodes(o))));
+}
+
+function checkToAndFromNodes(o) {
+  assert(full(o) == full(toRaw(toNodes(o))));
+}
+
+toAndFromNodes(small);
+toAndFromNodes(joe);
+checkToAndFromNodes(small);
+checkToAndFromNodes(joe);
