@@ -743,9 +743,14 @@ function checkToAndFromNodes(o) {
   assert(full(o) == full(toRaw(toNodes(o))));
 }
 
-toAndFromNodes(small);
-toAndFromNodes(joe);
-checkToAndFromNodes(small);
-checkToAndFromNodes(joe);
+/* toAndFromNodes(small); */
+/* toAndFromNodes(joe); */
+/* checkToAndFromNodes(small); */
+/* checkToAndFromNodes(joe); */
+
+/* shew(full(allNonListPaths(joe))); */
 
 shew(full(allNonListPaths(joe)));
+shew(full(allLeafPaths(joe)));
+//shew(full(justHashes(joe)));
+blurt(joe);
