@@ -89,6 +89,10 @@ function concat() {
   return arr;
 }
 
+function grep(l, f) {
+  return l.filter(f);
+}
+
 function mkrec() {
   var o = new Object();
   for (var i = 0; i < arguments.length; i += 2) {
@@ -622,9 +626,34 @@ function allNonListPaths(o) {
   }
 }
 
-//tracefuns("allLeafPaths");
+function allPathsListsCollapsed(o) {
+  if (isScalar(o)) {
+    return [[]];
+  } else if (isList(o)) {
+    return concat([['*']], allPathsListsCollapsed(o[0]).map(function (r) { return concat(['*'], r); }));
+  } else if (isRecord(o)) {
+    return concat.apply(this, keymap(function (k) { return allPathsListsCollapsed(o[k]).map(function (path) { return concat([k], path); }); }, o)); // concat([k], allLeafPaths(o[k])); }, o);
+   } else {
+    assert(false);
+  }
+}
 
-//tracefuns("asRecords");
+// Return all paths that end in '*'.
+function allListEnded(o) {
+  return allListEnded1(o, []);
+}
+
+function allListEnded1(o, prefix) {
+  if (isScalar(o)) {
+    return [];
+  } else if (isList(o)) {
+    return concat([concat(prefix, ['*'])], allListEnded1(o[0], concat(prefix, ['*'])));
+  } else if (isRecord(o)) {
+    return concat.apply(this, keymap(function(k) { return allListEnded1(o[k], concat(prefix, [k])) }, o));
+   } else {
+    assert(false);
+  }
+}
 
 //put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
 //put(maketable(jeter));
@@ -638,7 +667,7 @@ function allNonListPaths(o) {
 //put(horizontalArraystable(splitAxesAndValue(gatherCoordsAndValues(joe))));
 //put(mapListAxesTable(joe).asHtml());
 put(dumtable(extractHierarchy(joe)));
-/* put(dumtable(getListPaths(joe))); */
+//put(dumtable(getListPaths(joe)));
 /* put(maketable(asRecords(joe, ["games", "*", "atbats"]))); */
 /* put(maketable(asRecords(joe, ["games", "*", "catches"]))); */
 /* put(maketable(asRecords(joe, ["games"]))); */
@@ -750,7 +779,8 @@ function checkToAndFromNodes(o) {
 
 /* shew(full(allNonListPaths(joe))); */
 
-shew(full(allNonListPaths(joe)));
-shew(full(allLeafPaths(joe)));
+//shew(full(allNonListPaths(joe)));
+//shew(full(allPathsListsCollapsed(joe)));
+shew(full(allListEnded(joe)));
 //shew(full(justHashes(joe)));
-blurt(joe);
+//blurt(joe);
