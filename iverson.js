@@ -1,3 +1,28 @@
+var _ = 'asdfjla;sdhfaos8yfg98dhfg9s8dfyg0s89dfg;sldkf';
+function $$(f, args, newargs) {
+  var ni = 0;
+
+  var notyet = false;
+
+  for (var a = 0; a < args.length; ++a) {
+    if (args[a] == _) {
+      if (ni < newargs.length) {
+        args[a] = newargs[ni++];
+      } else {
+        notyet = true;
+      }
+    }
+  }
+
+  if (notyet) {
+    return function() {
+      return $$(f, args, dupArguments(arguments));
+    };
+  } else {
+    return f.apply(null, args);
+  }
+}
+
 function hr() {
   shew("----------------");
 }
@@ -106,6 +131,10 @@ function concat() {
 
 function grep(l, f) {
   return l.filter(f);
+}
+
+function eqer(o) {
+  return function(p) { return o == p; };
 }
 
 function mkrec() {
