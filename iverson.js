@@ -1,5 +1,13 @@
+function rdc(arr) {
+  return arr.slice(0, arr.length-1);
+}
+
 var _ = 'asdfjla;sdhfaos8yfg98dhfg9s8dfyg0s89dfg;sldkf';
-function $$(f, args, newargs) {
+
+function $$() {
+}
+
+function papp(f, args, newargs) {
   var ni = 0;
 
   var notyet = false;
@@ -13,14 +21,19 @@ function $$(f, args, newargs) {
       }
     }
   }
+shew(full(args));
 
   if (notyet) {
     return function() {
-      return $$(f, args, dupArguments(arguments));
+      return papp(f, args, dupArguments(arguments));
     };
   } else {
     return f.apply(null, args);
   }
+}
+function $$() {
+  var oargs = dupArguments(arguments);
+  return papp(oargs[0], oargs.slice(1), dupArguments(arguments));
 }
 
 function hr() {
@@ -828,9 +841,20 @@ function checkToAndFromNodes(o) {
 //shew(full(justHashes(joe)));
 //blurt(joe);
 
-/* function froot(o) { */
-/*   shew(full(keysAt(o,  */
-/* } */
+function keysAt(o, path) {
+  if (isRecord(o)) {
+    return keys(get(o, path));
+  } else if (isList(o)) {
+    return indices(get(o, path));
+  } else {
+    assert(false);
+  }
+}
+
+function froot(o, path) {
+  shew(full(keysAt(o, rdc(path))));
+}
 
 shew(full(allListEnded(joe)));
-//map(froot, joe, allListEnded(joe));
+//map($$(froot, joe, _), allListEnded(joe));
+shew($$(function(a, b) { return a + b; }, 1, 2));
