@@ -69,6 +69,21 @@ function listmap(f, list) {
   return list.map(f);
 }
 
+// Allows more than one argument to f.  Assumes the same length for
+// all input lists.
+function map(f) {
+  var results = new Array();
+
+  for (var i = 0; i < arguments[1].length; ++i) {
+    var arglist = new Array();
+    for (var a = 1; a < arguments.length; ++a) {
+      arglist[a - 1] = arguments[a][i];
+    }
+    results[i] = f.apply(null, arglist);
+  }
+  return results;
+}
+
 function isNumber (o) {
   return !isNaN(o-0);
 }
@@ -781,6 +796,12 @@ function checkToAndFromNodes(o) {
 
 //shew(full(allNonListPaths(joe)));
 //shew(full(allPathsListsCollapsed(joe)));
-shew(full(allListEnded(joe)));
 //shew(full(justHashes(joe)));
 //blurt(joe);
+
+/* function froot(o) { */
+/*   shew(full(keysAt(o,  */
+/* } */
+
+shew(full(allListEnded(joe)));
+//map(froot, joe, allListEnded(joe));
