@@ -1,3 +1,23 @@
+var unit_tests_expectations = [function () { return partially_apply(f, allArgs, dupArguments(arguments)); }, 11, 3, function () { return partially_apply(f, allArgs, dupArguments(arguments)); }, function () { return partially_apply(f, allArgs, dupArguments(arguments)); }, 31, 31, function () { return partially_apply(f, allArgs, dupArguments(arguments)); }, 13];
+
+var unit_tests_actual = [];
+function test() {
+  for (var a = 0; a < arguments.length; ++a) {
+    unit_tests_actual.push(arguments[a]);
+  }
+}
+
+function ut() {
+  if ((unit_tests_actual + "") == (unit_tests_expectations + "")) {
+    shew("(ok)");
+  } else {
+    shew("TEST FAILURE");
+    shew((unit_tests_actual + ""), (unit_tests_expectations + ""));
+    shew(full(unit_tests_actual), full(unit_tests_expectations));
+  }
+}
+
+
 function rdc(arr) {
   return arr.slice(0, arr.length-1);
 }
@@ -49,15 +69,15 @@ function $$() {
   return partially_apply(arguments[0], dupArguments(arguments).slice(1), []);
 }
 
-/* shew($$(function(a, b) { return a + b; }, 1, _)); */
-/* shew($$(function(a, b) { return a + b; }, 1, _)(10)); */
-/* shew($$(function(a, b) { return a + b; }, 1, 2)); */
-/* shew($$(function(a, b, c) { return a + b + c; }, 1, _, _)); */
-/* shew($$(function(a, b, c) { return a + b + c; }, 1, _, _)(10)); */
-/* shew($$(function(a, b, c) { return a + b + c; }, 1, _, _)(10)(20)); */
-/* shew($$(function(a, b, c) { return a + b + c; }, 1, _, _)(10, 20)); */
-/* shew($$(function(a, b, c) { return a + b + c; }, 1, 2, _)); */
-/* shew($$(function(a, b, c) { return a + b + c; }, 1, 2, _)(10)); */
+test($$(function(a, b) { return a + b; }, 1, _));
+test($$(function(a, b) { return a + b; }, 1, _)(10));
+test($$(function(a, b) { return a + b; }, 1, 2));
+test($$(function(a, b, c) { return a + b + c; }, 1, _, _));
+test($$(function(a, b, c) { return a + b + c; }, 1, _, _)(10));
+test($$(function(a, b, c) { return a + b + c; }, 1, _, _)(10)(20));
+test($$(function(a, b, c) { return a + b + c; }, 1, _, _)(10, 20));
+test($$(function(a, b, c) { return a + b + c; }, 1, 2, _));
+test($$(function(a, b, c) { return a + b + c; }, 1, 2, _)(10));
 
 function hr() {
   shew("----------------");
@@ -67,7 +87,7 @@ function full(o) {
   if (o instanceof Array) {
     return "[" + o.map(full).join(", ") + "]";
   } else if (o instanceof Function) {
-    return "[func]";
+    return o + ""; //"[func]";
   } else if (o instanceof Object) {
     return "{" + keys(o).map(function (key) { return key + ": " + full(o[key]); }).join(", ") + "}";
   } else {
@@ -888,3 +908,5 @@ function froot(o, path) {
 
 shew(full(allListEnded(joe)));
 //map($$(froot, joe, _), allListEnded(joe));
+
+ut();
