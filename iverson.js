@@ -22,6 +22,10 @@ function rdc(arr) {
   return arr.slice(0, arr.length-1);
 }
 
+function snoc(tail, head) {
+  return concat(tail, [head]);
+}
+
 var _ = 'asdfjla;sdhfaos8yfg98dhfg9s8dfyg0s89dfg;sldkf';
 
 // Replace _ slots in oargs with values from nargs; append remaining
@@ -765,6 +769,8 @@ function allListEnded1(o, prefix) {
 
 ut();
 
+put(dumtable(extractHierarchy(joe)));
+
 //put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
 //put(maketable(jeter));
 //put(dumtable([{a: 10, b: 20}, {a: 100, b: 200}]));
@@ -772,11 +778,8 @@ ut();
 
 /* put(dumtable(joe)); */
 /* put(horizontalArraystable(removeDuplicates(gatherCoords(joe)))); */
-/* put(horizontalArraystable(gatherCoordsAndValues(joe))); */
-/* put(horizontalArraystable(gatherCoordsAndValues(joe))); */
 //put(horizontalArraystable(splitAxesAndValue(gatherCoordsAndValues(joe))));
 //put(mapListAxesTable(joe).asHtml());
-put(dumtable(extractHierarchy(joe)));
 //put(dumtable(getListPaths(joe)));
 /* put(maketable(asRecords(joe, ["games", "*", "atbats"]))); */
 /* put(maketable(asRecords(joe, ["games", "*", "catches"]))); */
@@ -910,3 +913,25 @@ function froot(o, path) {
 
 shew(full(allListEnded(joe)));
 //map($$(froot, joe, _), allListEnded(joe));
+
+function toRows(o) {
+  return toRows1(o, []);
+}
+
+/* function toRows1(o, prefix) { */
+/*   if (isScalar(o)) { */
+/*     var s = {}; */
+/*     s[prefix] = o; */
+/*     return [s]; */
+/*   } else if (isList(o)) { */
+/*   } else if (isRecord(o)) { */
+/*     var oo = {}; */
+/*     for (k in o) { */
+/*       var rows = toRows1(o[k], snoc(prefix, k)); */
+/*     } */
+/*   } else { */
+/*     err(); */
+/*   } */
+/* } */
+
+put(horizontalArraystable(gatherCoordsAndValues(joe)));
