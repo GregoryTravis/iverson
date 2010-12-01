@@ -4,37 +4,60 @@ function rdc(arr) {
 
 var _ = 'asdfjla;sdhfaos8yfg98dhfg9s8dfyg0s89dfg;sldkf';
 
-function $$() {
-}
-
-function papp(f, args, newargs) {
+// Replace _ slots in oargs with values from nargs; append remaining
+// nargs -- no, make additional args an error.  If the _ slots are all
+// full, call the function; otherwise,
+// return another closure.
+function partially_apply(f, oargs, nargs) {
   var ni = 0;
 
-  var notyet = false;
+  oargs = dup(oargs);
 
-  for (var a = 0; a < args.length; ++a) {
-    if (args[a] == _) {
-      if (ni < newargs.length) {
-        args[a] = newargs[ni++];
+  var allFilled = true;
+
+  // Replace
+  for (var oi = 0; oi < oargs.length; ++oi) {
+    if (oargs[oi] == _) {
+      if (ni < nargs.length) {
+        oargs[oi] = nargs[ni++];
       } else {
-        notyet = true;
+        allFilled = false;
+        break;
       }
     }
   }
-shew(full(args));
 
-  if (notyet) {
-    return function() {
-      return papp(f, args, dupArguments(arguments));
-    };
+  var allArgs = oargs;
+
+  // Append remaining nargs
+  if (ni < nargs.length) {
+    // Actually, no, make this an error.
+    //allArgs = concat(allArgs, nargs.slice(ni));
+    err();
+  }
+
+  if (allFilled) {
+    // Call function
+    return f.apply(null, allArgs);
   } else {
-    return f.apply(null, args);
+    // Return closure
+    return function() { return partially_apply(f, allArgs, dupArguments(arguments)); };
   }
 }
+
 function $$() {
-  var oargs = dupArguments(arguments);
-  return papp(oargs[0], oargs.slice(1), dupArguments(arguments));
+  return partially_apply(arguments[0], dupArguments(arguments).slice(1), []);
 }
+
+/* shew($$(function(a, b) { return a + b; }, 1, _)); */
+/* shew($$(function(a, b) { return a + b; }, 1, _)(10)); */
+/* shew($$(function(a, b) { return a + b; }, 1, 2)); */
+/* shew($$(function(a, b, c) { return a + b + c; }, 1, _, _)); */
+/* shew($$(function(a, b, c) { return a + b + c; }, 1, _, _)(10)); */
+/* shew($$(function(a, b, c) { return a + b + c; }, 1, _, _)(10)(20)); */
+/* shew($$(function(a, b, c) { return a + b + c; }, 1, _, _)(10, 20)); */
+/* shew($$(function(a, b, c) { return a + b + c; }, 1, 2, _)); */
+/* shew($$(function(a, b, c) { return a + b + c; }, 1, 2, _)(10)); */
 
 function hr() {
   shew("----------------");
@@ -127,11 +150,19 @@ function isNumber (o) {
 }
 
 function dup(o) {
-  var oo = new Object();
-  for (var k in o) {
-    oo[k] = o[k];
+  if (o instanceof Array) {
+    var arr = new Array();
+    for (var i = 0; i < o.length; ++i) {
+      arr.push(o[i]);
+    }
+    return arr;
+  } else {
+    var oo = new Object();
+    for (var k in o) {
+      oo[k] = o[k];
+    }
+    return oo;
   }
-  return oo;
 }
 
 function concat() {
@@ -857,4 +888,3 @@ function froot(o, path) {
 
 shew(full(allListEnded(joe)));
 //map($$(froot, joe, _), allListEnded(joe));
-shew($$(function(a, b) { return a + b; }, 1, 2));
