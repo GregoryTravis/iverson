@@ -763,6 +763,8 @@ function allListEnded1(o, prefix) {
   }
 }
 
+ut();
+
 //put(maketable([{a: 10, b: 20}, {a: 100, b: 200}]));
 //put(maketable(jeter));
 //put(dumtable([{a: 10, b: 20}, {a: 100, b: 200}]));
@@ -908,5 +910,3 @@ function froot(o, path) {
 
 shew(full(allListEnded(joe)));
 //map($$(froot, joe, _), allListEnded(joe));
-
-ut();
