@@ -17,6 +17,9 @@ function ut() {
   }
 }
 
+function rac(arr) {
+  return arr[arr.length-1];
+}
 
 function rdc(arr) {
   return arr.slice(0, arr.length-1);
@@ -203,6 +206,10 @@ function grep(l, f) {
 
 function eqer(o) {
   return function(p) { return o == p; };
+}
+
+function notter(f) {
+  return function(o) { return !f(o); };
 }
 
 function mkrec() {
@@ -591,6 +598,11 @@ function CoordTable() {
       for (var j = 0; j < xlist.length; ++j) {
         var td = elem("td");
         var value = values[this.key(xlist[j], ylist[i])];
+
+        if (value == undefined) {
+          value = "";
+        }
+
         value = (value instanceof Node) ? value : text(value);
         td.appendChild(value);
         tr.appendChild(td);
@@ -935,3 +947,14 @@ function toRows(o) {
 /* } */
 
 put(horizontalArraystable(gatherCoordsAndValues(joe)));
+var ct = new CoordTable();
+map(function(cav) {
+    var value = rac(cav);
+    var coords = rdc(cav);
+    var rowCoords = rdc(coords);
+    var columnCoords = grep(coords, notter(isNumber));
+
+    ct.put(columnCoords.join('/'), rowCoords.join('/'), value);
+  },
+  gatherCoordsAndValues(joe));
+put(ct.asHtml());
