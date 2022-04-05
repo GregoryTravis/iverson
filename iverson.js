@@ -790,12 +790,13 @@ put(dumtable(extractHierarchy(joe)));
 
 /* put(dumtable(joe)); */
 /* put(horizontalArraystable(removeDuplicates(gatherCoords(joe)))); */
-//put(horizontalArraystable(splitAxesAndValue(gatherCoordsAndValues(joe))));
-//put(mapListAxesTable(joe).asHtml());
+/* put(horizontalArraystable(removeDuplicates(gatherCoordsAndValues(joe)))); */
+/* put(horizontalArraystable(splitAxesAndValue(gatherCoordsAndValues(joe)))); */
+/* put(mapListAxesTable(joe).asHtml()); */
 //put(dumtable(getListPaths(joe)));
-/* put(maketable(asRecords(joe, ["games", "*", "atbats"]))); */
-/* put(maketable(asRecords(joe, ["games", "*", "catches"]))); */
-/* put(maketable(asRecords(joe, ["games"]))); */
+put(maketable(asRecords(joe, ["games", "*", "atbats"])));
+put(maketable(asRecords(joe, ["games", "*", "catches"])));
+put(maketable(asRecords(joe, ["games"])));
 //blurt(joe);
 /* listmap(function (path) { shew(full(get(joe, path))); }, */
 /*   [ */
